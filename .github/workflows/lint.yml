@@ -1,0 +1,41 @@
+name: Code Quality
+
+on:
+  push:
+    branches: [ develop, master ]
+  pull_request:
+    branches: [ develop, master ]
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.x'
+
+    - name: Install linters
+      run: |
+        pip install flake8 pylint
+
+    - name: Lint with flake8
+      run: |
+        # Stop on syntax errors or undefined names
+        flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
+        # Exit-zero treats all errors as warnings
+        flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
+      continue-on-error: true
+
+    - name: Check file sizes
+      run: |
+        echo "Checking compiled bytecode sizes..."
+        python3 -m py_compile base.py charset.py
+        python3 -m py_compile drivers/pcf85176.py
+        python3 -m py_compile displays/pcf85176/raw.py
+        python3 -m py_compile displays/pcf85176/dr821b.py
+        find . -name "*.pyc" -exec ls -lh {} \;

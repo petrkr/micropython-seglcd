@@ -1,0 +1,40 @@
+name: MicroPython Tests
+
+on:
+  push:
+    branches: [ develop, master ]
+  pull_request:
+    branches: [ develop, master ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Install MicroPython
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y micropython
+
+    - name: Verify MicroPython installation
+      run: micropython --version
+
+    - name: Run syntax tests
+      run: micropython test_syntax.py
+
+    - name: Run 4DR821B tests
+      run: micropython test_4dr821b.py
+
+    - name: Test all imports
+      run: |
+        micropython -c "
+        from base import SegLCD, MODE_DRIVE_14, MODE_BIAS_13
+        from charset import get_char_value, get_16char_value
+        from drivers.pcf85176 import PCF85176Driver
+        from displays.pcf85176.raw import PCF85176_Raw
+        from displays.pcf85176.dr821b import PCF85176_4DR821B
+        print('All imports successful!')
+        "

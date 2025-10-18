@@ -1,5 +1,8 @@
 # SegLCD for MicroPython
 
+[![MicroPython Tests](https://github.com/petrkr/micropython-seglcd/actions/workflows/test.yml/badge.svg)](https://github.com/petrkr/micropython-seglcd/actions/workflows/test.yml)
+[![Code Quality](https://github.com/petrkr/micropython-seglcd/actions/workflows/lint.yml/badge.svg)](https://github.com/petrkr/micropython-seglcd/actions/workflows/lint.yml)
+
 Modular library for segment LCD displays and controllers for MicroPython (primarily ESP32).
 
 MicroPython port of Arduino library [SegLCDLib](https://github.com/petrkr/SegLCDLib) with focus on modularity and memory efficiency.

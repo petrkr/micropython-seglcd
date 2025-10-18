@@ -1,6 +1,6 @@
 """
 MicroPython SegLCD Library Tests
-Run with: cd micropython-seglcd && micropython test_syntax.py
+Run with: micropython test_syntax.py
 """
 
 print("="*60)

@@ -33,11 +33,13 @@ micropython-seglcd/
 ├── displays/
 │   ├── pcf85176/
 │   │   ├── raw.py           # RAW - direct RAM access
+│   │   ├── dr821b.py        # Tesla 4DR821B 4-digit clock ⭐
 │   │   ├── temphum.py       # Temp/Humidity display (TODO)
 │   │   └── ...
 │   └── ...
 └── examples/
-    └── pcf85176_raw_example.py
+    ├── pcf85176_raw_example.py
+    └── 4dr821b_clock_example.py  # Tesla clock examples ⭐
 ```
 
 ## Quick Start
@@ -185,6 +187,7 @@ class MyDisplay(PCF85176Driver):
 - [x] Charset (7-segment + 16-segment)
 - [x] PCF85176 I2C driver
 - [x] PCF85176 RAW display
+- [x] PCF85176 4DR821B (Tesla 4-digit clock) 🎯
 - [ ] PCF85176 TempHum display
 - [ ] PCF85176 6-digit display
 - [ ] HT1621 3-wire driver

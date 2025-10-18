@@ -9,6 +9,7 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
+    container: debian:trixie
 
     steps:
     - name: Checkout code
@@ -16,8 +17,8 @@ jobs:
 
     - name: Install MicroPython
       run: |
-        sudo apt-get update
-        sudo apt-get install -y micropython
+        apt-get update
+        apt-get install -y micropython
 
     - name: Verify MicroPython installation
       run: micropython --version

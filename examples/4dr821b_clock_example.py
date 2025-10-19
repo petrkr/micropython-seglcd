@@ -6,7 +6,7 @@ Demonstrates 4-digit clock display with colon
 from machine import I2C, Pin, RTC
 import time
 
-from displays.pcf85176.dr821b import PCF85176_4DR821B
+from seglcd.displays.pcf85176.dr821b import PCF85176_4DR821B
 
 # Initialize I2C
 # ESP32 defaults: SDA=Pin(21), SCL=Pin(22)

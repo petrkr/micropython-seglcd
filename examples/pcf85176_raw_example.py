@@ -7,8 +7,8 @@ from machine import I2C, Pin
 import time
 
 # Import the RAW display class (files must be uploaded to ESP32 first)
-from displays.pcf85176.raw import PCF85176_Raw
-from base import MODE_DRIVE_STATIC, MODE_DRIVE_14, MODE_BIAS_13
+from seglcd.displays.pcf85176.raw import PCF85176_Raw
+from seglcd.base import MODE_DRIVE_STATIC, MODE_DRIVE_14, MODE_BIAS_13
 
 # Initialize I2C
 # ESP32: SDA=Pin(21), SCL=Pin(22) are default

@@ -25,7 +25,7 @@ _MIDDLE_COLON_BIT  = const(0x01)
 _ARROW_BIT         = const(0x10)
 _LEFT_COLON_BIT    = const(0x20)
 _MINUS_BIT         = const(0x40)
-_WAVE_BIT          = const(0x80)
+_TILDA_BIT         = const(0x80)
 _DECIMAL_MIN_COL   = const(0)
 _DECIMAL_MAX_COL   = const(2)
 
@@ -138,6 +138,24 @@ class PCF85176_4DR821B(PCF85176Driver):
         # Write to display RAM
         # Static drive: address = byte_position * 8
         self._write_ram(self._buffer[_ADDR_SEGS + col], (_ADDR_SEGS + col) * 8)
+
+    def set_tilda(self, state):
+        """
+        Set tilda symbol at column 0.
+
+        Args:
+            state: True to show tilda, False to hide
+        """
+        self._set_symbol(_TILDA_BIT, state)
+
+    def set_arrow(self, state):
+        """
+        Set arrow symbol at column 0.
+
+        Args:
+            state: True to show arrow, False to hide
+        """
+        self._set_symbol(_ARROW_BIT, state)
 
     def set_cursor(self, row, col):
         if row == 0 and col <= 2:

@@ -63,6 +63,7 @@ class PCF85176_4DR821B(PCF85176Driver):
         self._buffer = bytearray(5)  # 1 symbol byte + 4 digit bytes
         self._previous_dot = False
         self._colon_displayed = False
+        self._first_colon_displayed = False
 
     def _set_symbol(self, symbol, state):
         """
@@ -141,6 +142,9 @@ class PCF85176_4DR821B(PCF85176Driver):
         if row == 0 and col <= 2:
             self._colon_displayed = False
 
+        if row == 0 and col == 0:
+            self._first_colon_displayed = False
+
         super().set_cursor(row, col)
 
     def _write_char(self, ch):
@@ -165,7 +169,7 @@ class PCF85176_4DR821B(PCF85176Driver):
             self.set_decimal(self._cursor_row, self._cursor_col - 1, True)
             return True
 
-        # Handle clock colon
+        # Handle clock/middle colon
         if ch != ord(':') and self._cursor_col == 2 and not self._colon_displayed:
             self.set_clock_colon(self._cursor_row, self._cursor_col - 1, False)
             self._colon_displayed = False
@@ -174,6 +178,17 @@ class PCF85176_4DR821B(PCF85176Driver):
             self.set_clock_colon(self._cursor_row, self._cursor_col - 1, True)
             self._colon_displayed = True
             return True
+
+        # Handle left/first colon
+        if ch != ord(':') and self._cursor_col == 0 and not self._first_colon_displayed:
+            self.set_clock_colon(self._cursor_row, self._cursor_col, False)
+            self._first_colon_displayed = False
+
+        if ch == ord(':') and self._cursor_col == 0 and not self._first_colon_displayed:
+            self.set_clock_colon(self._cursor_row, self._cursor_col, True)
+            self._first_colon_displayed = True
+            return True
+
 
         # Get segment data for character
         segment_data = get_char_value(ch)

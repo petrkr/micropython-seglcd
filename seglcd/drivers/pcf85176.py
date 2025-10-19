@@ -62,7 +62,6 @@ class PCF85176Driver(SegLCD):
     def init(self):
         """Initialize the display driver."""
         self._device_select()
-        self.clear()
 
     def command(self, cmd):
         """

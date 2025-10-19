@@ -62,7 +62,6 @@ class PCF85176_4DR821B(PCF85176Driver):
         """Initialize display with static drive mode."""
         super().init()
         self._set_mode(1, MODE_DRIVE_STATIC, MODE_BIAS_13)  # 1 = enabled
-        self.clear()
 
     def clear(self):
         """Clear all segments and buffer."""

@@ -13,3 +13,4 @@ Example usage:
 
 __version__ = '0.0.1'
 __author__ = 'Petr Kracik'
+__license__ = 'MIT'

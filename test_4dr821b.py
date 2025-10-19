@@ -18,7 +18,7 @@ class MockI2C:
 
 print("\n[TEST 1] Import and instantiate...")
 try:
-    from displays.pcf85176.dr821b import PCF85176_4DR821B
+    from seglcd.displays.pcf85176.dr821b import PCF85176_4DR821B
 
     i2c_mock = MockI2C()
     lcd = PCF85176_4DR821B(i2c_mock)

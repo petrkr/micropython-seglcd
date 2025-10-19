@@ -22,7 +22,7 @@ class MockI2C:
 
 print("\n[TEST 1] Testing base.py...")
 try:
-    from base import SegLCD, MODE_DRIVE_14, MODE_BIAS_13, MODE_DRIVE_STATIC
+    from seglcd.base import SegLCD, MODE_DRIVE_14, MODE_BIAS_13, MODE_DRIVE_STATIC
     print("  ✓ Imports successful")
     print(f"  ✓ MODE_DRIVE_14 = {MODE_DRIVE_14}")
     print(f"  ✓ MODE_BIAS_13 = {MODE_BIAS_13}")
@@ -32,7 +32,7 @@ except Exception as e:
 
 print("\n[TEST 2] Testing charset.py...")
 try:
-    from charset import get_char_value, get_16char_value
+    from seglcd.charset import get_char_value, get_16char_value
 
     # Test 7-segment characters
     test_cases = [
@@ -63,7 +63,7 @@ except Exception as e:
 
 print("\n[TEST 3] Testing drivers/pcf85176.py...")
 try:
-    from drivers.pcf85176 import PCF85176Driver, BLINK_FREQUENCY_2HZ
+    from seglcd.drivers.pcf85176 import PCF85176Driver, BLINK_FREQUENCY_2HZ
 
     i2c_mock = MockI2C()
     driver = PCF85176Driver(i2c_mock, address=0x38)
@@ -85,14 +85,12 @@ try:
 
 except Exception as e:
     print(f"  ✗ FAILED: {e}")
-    import traceback
-    traceback.print_exc()
     sys.exit(1)
 
 print("\n[TEST 4] Testing displays/pcf85176/raw.py...")
 try:
-    from displays.pcf85176.raw import PCF85176_Raw
-    from base import MODE_DRIVE_14, MODE_BIAS_13
+    from seglcd.displays.pcf85176.raw import PCF85176_Raw
+    from seglcd.base import MODE_DRIVE_14, MODE_BIAS_13
 
     i2c_mock = MockI2C()
     lcd = PCF85176_Raw(i2c_mock)
@@ -123,8 +121,6 @@ try:
 
 except Exception as e:
     print(f"  ✗ FAILED: {e}")
-    import traceback
-    traceback.print_exc()
     sys.exit(1)
 
 print("\n[TEST 5] Memory usage check...")

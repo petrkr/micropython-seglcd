@@ -63,7 +63,8 @@ class PCF85176_4DR821B(PCF85176Driver):
         self._buffer = bytearray(5)  # 1 symbol byte + 4 digit bytes
         self._previous_dot = False
         self._colon_displayed = False
-        self._first_colon_displayed = False
+        self._col0_overlay_active = False
+
 
     def _set_symbol(self, symbol, state):
         """
@@ -143,7 +144,7 @@ class PCF85176_4DR821B(PCF85176Driver):
             self._colon_displayed = False
 
         if row == 0 and col == 0:
-            self._first_colon_displayed = False
+            self._col0_overlay_active = False
 
         super().set_cursor(row, col)
 
@@ -153,10 +154,8 @@ class PCF85176_4DR821B(PCF85176Driver):
 
         Handles special characters:
         - '.' sets decimal point on previous digit
-        - ':' sets clock colon
-
-        Args:
-            ch: Character code (int)
+        - ':' sets clock colon at middle position
+        - '-', '+', ':' at col=0 set overlay symbols
 
         Returns:
             True if successful
@@ -179,16 +178,35 @@ class PCF85176_4DR821B(PCF85176Driver):
             self._colon_displayed = True
             return True
 
-        # Handle left/first colon
-        if ch != ord(':') and self._cursor_col == 0 and not self._first_colon_displayed:
-            self.set_clock_colon(self._cursor_row, self._cursor_col, False)
-            self._first_colon_displayed = False
+        # Symbols at column zero
+        if self._cursor_col == 0:
+            # Sign characters for overlay
+            if ch in (ord('-'), ord('+'), ord(':')):
+                # clean up
+                self._set_symbol(_MINUS_BIT, False)
+                self._set_symbol(_LEFT_COLON_BIT, False)
 
-        if ch == ord(':') and self._cursor_col == 0 and not self._first_colon_displayed:
-            self.set_clock_colon(self._cursor_row, self._cursor_col, True)
-            self._first_colon_displayed = True
-            return True
+                if ch == ord('-'):
+                    self._set_symbol(_MINUS_BIT, True)
+                elif ch == ord(':'):
+                    self._set_symbol(_LEFT_COLON_BIT, True)
+                elif ch == ord('+'):
+                    self._set_symbol(_MINUS_BIT, True)
+                    self._set_symbol(_LEFT_COLON_BIT, True)
+                else:
+                    return False  # Should not happen
 
+                # Col 0 overlay
+                self._col0_overlay_active = True
+                return True  # Do not increment cursor
+
+            # first char after overlay, disable overlay
+            if self._col0_overlay_active:
+                self._col0_overlay_active = False
+            else:
+                # no overlay active, ensure symbols are off
+                self._set_symbol(_MINUS_BIT, False)
+                self._set_symbol(_LEFT_COLON_BIT, False)
 
         # Get segment data for character
         segment_data = get_char_value(ch)

@@ -57,6 +57,7 @@ class PCF85176_4DR821B(PCF85176Driver):
         super().__init__(i2c, address, subaddress)
         self._buffer = bytearray(5)  # 1 symbol byte + 4 digit bytes
         self._previous_dot = False
+        self._colon_displayed = False
 
     def init(self):
         """Initialize display with static drive mode."""
@@ -112,6 +113,12 @@ class PCF85176_4DR821B(PCF85176Driver):
         # Static drive: address = byte_position * 8
         self._write_ram(self._buffer[_ADDR_SEGS + col], (_ADDR_SEGS + col) * 8)
 
+    def set_cursor(self, row, col):
+        if row == 0 and col <= 2:
+            self._colon_displayed = False
+
+        super().set_cursor(row, col)
+
     def _write_char(self, ch):
         """
         Write single character at cursor position.
@@ -135,8 +142,13 @@ class PCF85176_4DR821B(PCF85176Driver):
             return True
 
         # Handle clock colon
-        if ch == ord(':'):
+        if ch != ord(':') and self._cursor_col == 2 and not self._colon_displayed:
+            self.set_clock_colon(self._cursor_row, self._cursor_col - 1, False)
+            self._colon_displayed = False
+
+        if ch == ord(':') and self._cursor_col == 2 and not self._colon_displayed:
             self.set_clock_colon(self._cursor_row, self._cursor_col - 1, True)
+            self._colon_displayed = True
             return True
 
         # Get segment data for character

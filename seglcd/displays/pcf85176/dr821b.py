@@ -21,8 +21,13 @@ _ADDR_SEGS = const(0x01)
 # Constants
 _DIGITS = const(4)
 _DECIMAL_POINT_BIT = const(0x01)
-_DECIMAL_MIN_COL = const(0)
-_DECIMAL_MAX_COL = const(2)
+_MIDDLE_COLON_BIT  = const(0x01)
+_ARROW_BIT         = const(0x10)
+_LEFT_COLON_BIT    = const(0x20)
+_MINUS_BIT         = const(0x40)
+_WAVE_BIT          = const(0x80)
+_DECIMAL_MIN_COL   = const(0)
+_DECIMAL_MAX_COL   = const(2)
 
 
 class PCF85176_4DR821B(PCF85176Driver):
@@ -59,6 +64,21 @@ class PCF85176_4DR821B(PCF85176Driver):
         self._previous_dot = False
         self._colon_displayed = False
 
+    def _set_symbol(self, symbol, state):
+        """
+        Set symbol
+
+        Args:
+            symbol: Symbol bit
+            state: True to show symbol, False to hide
+        """
+        if state:
+            self._buffer[_ADDR_SYMBOLS] |= symbol
+        else:
+            self._buffer[_ADDR_SYMBOLS] &= ~symbol
+
+        self._write_ram(self._buffer[_ADDR_SYMBOLS], _ADDR_SYMBOLS)
+
     def init(self):
         """Initialize display with static drive mode."""
         super().init()
@@ -82,12 +102,16 @@ class PCF85176_4DR821B(PCF85176Driver):
             col: Column (not used, for API compatibility)
             state: True to show colon, False to hide
         """
-        if state:
-            self._buffer[_ADDR_SYMBOLS] |= _DECIMAL_POINT_BIT
-        else:
-            self._buffer[_ADDR_SYMBOLS] &= ~_DECIMAL_POINT_BIT
 
-        self._write_ram(self._buffer[_ADDR_SYMBOLS], _ADDR_SYMBOLS)
+        if col == 0:
+            if state: # If we want colon, we can not have minus here
+                self._set_symbol(_MINUS_BIT, False)
+
+            self._set_symbol(_LEFT_COLON_BIT, state)
+
+        if col == 1:
+            self._set_symbol(_MIDDLE_COLON_BIT, state)
+
 
     def set_decimal(self, row, col, state):
         """

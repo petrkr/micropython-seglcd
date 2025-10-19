@@ -34,8 +34,8 @@ jobs:
     - name: Check file sizes
       run: |
         echo "Checking compiled bytecode sizes..."
-        python3 -m py_compile base.py charset.py
-        python3 -m py_compile drivers/pcf85176.py
-        python3 -m py_compile displays/pcf85176/raw.py
-        python3 -m py_compile displays/pcf85176/dr821b.py
+        python3 -m py_compile seglcd/base.py seglcd/charset.py
+        python3 -m py_compile seglcd/drivers/pcf85176.py
+        python3 -m py_compile seglcd/displays/pcf85176/raw.py
+        python3 -m py_compile seglcd/displays/pcf85176/dr821b.py
         find . -name "*.pyc" -exec ls -lh {} \;

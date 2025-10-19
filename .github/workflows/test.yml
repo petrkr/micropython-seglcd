@@ -32,10 +32,10 @@ jobs:
     - name: Test all imports
       run: |
         micropython -c "
-        from base import SegLCD, MODE_DRIVE_14, MODE_BIAS_13
-        from charset import get_char_value, get_16char_value
-        from drivers.pcf85176 import PCF85176Driver
-        from displays.pcf85176.raw import PCF85176_Raw
-        from displays.pcf85176.dr821b import PCF85176_4DR821B
+        from seglcd.base import SegLCD, MODE_DRIVE_14, MODE_BIAS_13
+        from seglcd.charset import get_char_value, get_16char_value
+        from seglcd.drivers.pcf85176 import PCF85176Driver
+        from seglcd.displays.pcf85176.raw import PCF85176_Raw
+        from seglcd.displays.pcf85176.dr821b import PCF85176_4DR821B
         print('All imports successful!')
         "

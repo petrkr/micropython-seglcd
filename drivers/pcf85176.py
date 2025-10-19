@@ -3,7 +3,7 @@ PCF85176 I2C LCD Segment Driver for MicroPython
 """
 
 from micropython import const
-from base import SegLCD, MODE_DRIVE_14, MODE_BIAS_13
+from seglcd.base import SegLCD, MODE_DRIVE_14, MODE_BIAS_13
 
 
 # PCF85176 Commands

@@ -2,8 +2,8 @@
 PCF85176 RAW Display - Direct RAM access for testing
 """
 
-from drivers.pcf85176 import PCF85176Driver
-from base import MODE_DRIVE_14, MODE_BIAS_13
+from seglcd.drivers.pcf85176 import PCF85176Driver
+from seglcd.base import MODE_DRIVE_14, MODE_BIAS_13
 
 
 class PCF85176_Raw(PCF85176Driver):

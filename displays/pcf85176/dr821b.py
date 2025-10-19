@@ -10,9 +10,9 @@ Display layout: XX:XX (4 digits + colon)
 """
 
 from micropython import const
-from drivers.pcf85176 import PCF85176Driver
-from charset import get_char_value
-from base import MODE_DRIVE_STATIC, MODE_BIAS_13
+from seglcd.drivers.pcf85176 import PCF85176Driver
+from seglcd.charset import get_char_value
+from seglcd.base import MODE_DRIVE_STATIC, MODE_BIAS_13
 
 # Address mapping
 _ADDR_SYMBOLS = const(0x00)
